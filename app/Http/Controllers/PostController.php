@@ -8,7 +8,10 @@ use Illuminate\View\View;
 class PostController extends Controller
 {
     //
-    public function index($category) : View{
+    public function index($slug_category) : View{
         return View("fe/post/index");
+    }
+    public function detail($slug_post) : View{
+        return View("fe/post/detail");
     }
 }

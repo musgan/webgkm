@@ -27,6 +27,8 @@
     <!-- Template Main CSS File -->
     <link href="{{asset("template/Green/")}}/assets/css/style.css" rel="stylesheet">
 
+    @yield("css","")
+
     <!-- =======================================================
     * Template Name: Green
     * Updated: Jan 09 2024 with Bootstrap v5.3.2
@@ -55,6 +57,8 @@
 
 <!-- Template Main JS File -->
 <script src="{{asset("template/Green/")}}/assets/js/main.js"></script>
+
+@yield("js","")
 
 </body>
 
