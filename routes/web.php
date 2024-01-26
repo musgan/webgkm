@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get("/",[\App\Http\Controllers\WelcomeController::class,"index"]);
 Route::get("/post/{category}",[\App\Http\Controllers\PostController::class,"index"]);
 Route::get("/post/detail/{slug}",[\App\Http\Controllers\PostController::class,"detail"]);
+
+Auth::routes([
+    'register' => false,'reset' => false,'showRegistrationForm' => false,
+    'showConfirmForm'=>false,'confirm' => false]);
+
+Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'index'])->name('admin.home');
