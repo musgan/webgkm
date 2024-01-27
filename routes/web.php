@@ -22,3 +22,7 @@ Auth::routes([
     'showConfirmForm'=>false,'confirm' => false]);
 
 Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'index'])->name('admin.home');
+
+Route::prefix('admin')->group(function () {
+    Route::resource("post",\App\Http\Controllers\Admin\PostController::class);
+});
