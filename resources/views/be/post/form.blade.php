@@ -4,12 +4,18 @@
             <input type="text" class="form-control" id="post-title" name="title" placeholder="Judul" maxlength="200" value="{{$data?->title??old('title')}}" />
         </div>
         <ul class="list-unstyled" id="contents">
-            @foreach($data?->postContents() as $index => $row)
+            @foreach(($data?->postContents()??[]) as $index => $row)
                 @if($row->type === "text")
-                    <li class="mb-3">
-                        <input type="hidden" name="contents[{{$index}}][id]" value="{{$row->id}}">
-                        <input type="hidden" name="contents[{{$index}}][type]" value="text">
-                        <textarea class="form-control summernote" placeholder="Tuliskan Sesuatu" name="contents[{{$index}}][data]">{!! $row->content !!}</textarea>
+                    <li class="mb-3 border" id="postcontent{{$index}}">
+                        <div class="d-flex justify-content-between p-2">
+                            <div></div>
+                            <div>
+                                <button type="button" class="btn btn-danger btn-sm delete-post-content"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="contents[{{$index}}][id]" value="{{$row->id}}" />
+                        <input type="hidden" name="contents[{{$index}}][type]" value="text" />
+                        <textarea class="form-control" id="textEditor{{$index}}" placeholder="Tuliskan Sesuatu" name="contents[{{$index}}][data]">{!! $row->content !!}</textarea>
                     </li>
                 @endif
             @endforeach
@@ -32,22 +38,38 @@
 
 @push('js')
     <script  type="text/javascript">
-        const postTitle = document.getElementById("post-title")
-        const slug = document.getElementById("slug")
-        postTitle.addEventListener("keyup", function(e){
-            const title = e.target.value
-            let finalSlug = title.toLowerCase()
-            finalSlug = finalSlug.replaceAll(/[^a-zA-Z0-9 ]/g,'')
-            finalSlug = finalSlug.replaceAll(/\s\s+/g, ' ')
-            finalSlug = finalSlug.replaceAll(' ','-')
-            console.log("final slug", finalSlug)
-            slug.value = finalSlug
-        })
+        $(document).ready(function() {
+            const total_post = {{count($data?->postContents()??[]) }};
+            const postTitle = document.getElementById("post-title")
+            const slug = document.getElementById("slug")
+            postTitle.addEventListener("keyup", function (e) {
+                const title = e.target.value
+                let finalSlug = title.toLowerCase()
+                finalSlug = finalSlug.replaceAll(/[^a-zA-Z0-9 ]/g, '')
+                finalSlug = finalSlug.replaceAll(/\s\s+/g, ' ')
+                finalSlug = finalSlug.replaceAll(' ', '-')
+                slug.value = finalSlug
+            })
+            for (index = 0; index < total_post; index++) {
+                $(`#textEditor${index}`).summernote({
+                    placeholder: 'Tuliskan Sesuatu',
+                    tabsize: 2,
+                    height: 300
+                });
+            }
 
-        $(`.summernote`).summernote({
-            placeholder: 'Tuliskan Sesuatu',
-            tabsize: 2,
-            height: 300
+            function getParentElement(element) {
+                const el = element.parentElement
+                if (el.nodeName.toLowerCase() === "li")
+                    return el
+                else return getParentElement(el)
+            }
+
+            $(document).on('click', '.delete-post-content', function (e) {
+                const parent = getParentElement(e.target);
+                console.log("parent", parent)
+            })
+            $('#contents').sortable();
         });
     </script>
 @endpush
