@@ -8,7 +8,11 @@
                 @if($row->type === "text")
                     <li class="mb-3 border" id="postcontent{{$index}}">
                         <div class="d-flex justify-content-between p-2">
-                            <div></div>
+                            <div>
+                                <button type="button" class="btn btn-info btn-sm handle-post-content">
+                                    <i class="fas fa-arrows-alt handle"></i>
+                                </button>
+                            </div>
                             <div>
                                 <button type="button" class="btn btn-danger btn-sm delete-post-content"><i class="fa-solid fa-xmark"></i></button>
                             </div>
@@ -69,7 +73,9 @@
                 const parent = getParentElement(e.target);
                 console.log("parent", parent)
             })
-            $('#contents').sortable();
+            Sortable.create(contents, {
+                handle: '.handle-post-content',
+            });
         });
     </script>
 @endpush
