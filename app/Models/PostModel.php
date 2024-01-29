@@ -11,4 +11,8 @@ class PostModel extends Model
 
     protected $table = "posts";
     protected $fillable = ['title', 'short_text','gambar_unggulan','slug'];
+
+    public function postContents(){
+        return $this->hasMany(PostContentModel::class,"post_id","id")->orderBy('urutan','asc')->get();
+    }
 }

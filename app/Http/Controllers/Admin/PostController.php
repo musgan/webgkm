@@ -57,7 +57,7 @@ class PostController extends Controller
             $this->addPostContents($savePost->id, $request->contents);
             DB::commit();
 
-            redirect(url("admin/post"))->with('message_success', 'Berhasil menambahkan data');
+            return redirect(url("admin/post"))->with('message_success', 'Berhasil menambahkan data');
         }catch (\Exception $e){
             DB::rollBack();
             dd($e);
@@ -74,13 +74,25 @@ class PostController extends Controller
         return implode("/",[$pathUpload, $fileNameUpload]);
     }
 
-    function addPost($datas){
-
+    function penyesuaianDataPost($datas){
         $datas["short_text"] = Str::limit($datas["short_text"],180);
         $datas["title"] = Str::limit($datas["title"],180);
         $datas["slug"] = Str::limit($datas["slug"],180);
+        return $datas;
+    }
 
+    function addPost($datas){
+        $datas = $this->penyesuaianDataPost($datas);
         return PostModel::create($datas);
+    }
+    function updatePost($id, $datas){
+        $model = PostModel::where('id',$id)->first();
+
+        $datas = $this->penyesuaianDataPost($datas);
+        if(!array_key_exists('gambar_unggulan',$datas))
+            $datas['gambar_unggulan'] = $model->gambar_unggulan;
+
+        return $model->update($datas);
     }
 
     function addPostContents($post_id,$contents){
@@ -98,9 +110,14 @@ class PostController extends Controller
     }
 
     function savePostText($post_id, $urutan, $content){
-        $model = new PostContentModel();
+        $model = null;
+        if(array_key_exists("id",$content)){
+            $model = PostContentModel::findOrFail($content["id"]);
+        }else{
+            $model = new PostContentModel();
+            $model->type = $content['type'];
+        }
         $model->post_id = $post_id;
-        $model->type = $content['type'];
         $model->content = $content['data'];
         $model->urutan = $urutan;
         return $model->save();
@@ -141,9 +158,24 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
         //
+        try {
+            DB::beginTransaction();
+            $datas = $request->all();
+
+            if($request->gambar_unggulan)
+                $datas["gambar_unggulan"] = $this->uploadGambarUnggulan($request);
+
+            $this->updatePost($id, $datas);
+            $this->addPostContents($id, $request->contents);
+            DB::commit();
+            return redirect(url("admin/post"))->with('message_success', 'Berhasil memperbaharui data');
+        }catch (\Exception $e){
+            DB::rollBack();
+            dd($e);
+        }
     }
 
     /**

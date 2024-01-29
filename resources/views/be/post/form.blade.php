@@ -4,7 +4,15 @@
             <input type="text" class="form-control" id="post-title" name="title" placeholder="Judul" maxlength="200" value="{{$data?->title??old('title')}}" />
         </div>
         <ul class="list-unstyled" id="contents">
-
+            @foreach($data?->postContents() as $index => $row)
+                @if($row->type === "text")
+                    <li class="mb-3">
+                        <input type="hidden" name="contents[{{$index}}][id]" value="{{$row->id}}">
+                        <input type="hidden" name="contents[{{$index}}][type]" value="text">
+                        <textarea class="form-control summernote" placeholder="Tuliskan Sesuatu" name="contents[{{$index}}][data]">{!! $row->content !!}</textarea>
+                    </li>
+                @endif
+            @endforeach
         </ul>
     </div>
     <div class="col-md-4">
@@ -35,6 +43,12 @@
             console.log("final slug", finalSlug)
             slug.value = finalSlug
         })
+
+        $(`.summernote`).summernote({
+            placeholder: 'Tuliskan Sesuatu',
+            tabsize: 2,
+            height: 300
+        });
     </script>
 @endpush
 

@@ -18,7 +18,7 @@
 
     <li class="d-none mb-3" id="media-text">
         <input type="hidden" name="" value="text">
-        <textarea class="form-control summernote" placeholder="Tuliskan Sesuatu" name="contents[]"></textarea>
+        <textarea class="form-control" placeholder="Tuliskan Sesuatu" name="contents[]"></textarea>
     </li>
 
     <script type="text/javascript">

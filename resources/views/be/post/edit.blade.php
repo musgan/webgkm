@@ -17,7 +17,7 @@
                         "status" => ''
                     ],
                     [
-                        "name" => "Create",
+                        "name" => "Edit",
                         "path"  => "#",
                         "status" => "active"
                     ],
@@ -26,7 +26,7 @@
     @endphp
     <div class="container">
         @include("be.component.breadcrumb", compact('breadcrumb'))
-        <form method="POST" action="{{url("admin/post")}}" enctype="multipart/form-data">
+        <form method="POST" action="{{url("admin/post/".$data->id)}}" enctype="multipart/form-data">
             @csrf
             @method("PUT")
             <div class="d-flex justify-content-between mb-3">

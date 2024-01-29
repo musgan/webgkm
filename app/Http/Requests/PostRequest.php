@@ -27,7 +27,7 @@ class PostRequest extends FormRequest
             //
             'title' => 'required',
             'short_text'    => 'required',
-            'gambar_unggulan'   => 'required',
+//            'gambar_unggulan'   => 'required',
             'slug'  => 'required',
             'contents'  => 'required'
         ];
