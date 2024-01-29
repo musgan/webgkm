@@ -17,7 +17,8 @@
     </div>
 
     <li class="d-none mb-3" id="media-text">
-        <textarea class="form-control summernote" placeholder="Tuliskan Sesuatu" rows="5" name="contents[]"></textarea>
+        <input type="hidden" name="" value="text">
+        <textarea class="form-control summernote" placeholder="Tuliskan Sesuatu" name="contents[]"></textarea>
     </li>
 
     <script type="text/javascript">
@@ -51,6 +52,9 @@
             let id = Date.now();
             const addText = mediaText.cloneNode(true)
             const textArea = addText.getElementsByTagName('textarea')[0]
+            const type = addText.getElementsByTagName('input')[0]
+            type.name = `contents[${id}][type]`
+            textArea.name = `contents[${id}][data]`
             textArea.id = id
 
             addText.classList.remove("d-none")
@@ -58,7 +62,7 @@
             $(`#${id}`).summernote({
                 placeholder: 'Tuliskan Sesuatu',
                 tabsize: 2,
-                height: 100
+                height: 300
             });
         }
         function addImage(){
