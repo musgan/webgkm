@@ -16,7 +16,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Gambar Unggulan</label>
-            <img src="{{url($data?->gambar_unggulan)}}" class="img-fluid mb-3" alt="" />
+            <img src="{{isset($data)?url($data?->gambar_unggulan):''}}" class="img-fluid mb-3" alt="" />
             <input type="file" name="gambar_unggulan" class="form-control">
         </div>
     </div>
